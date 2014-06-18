@@ -1,0 +1,12 @@
+Summary: TACACS+ Daemon
+Name: tacacs+
+Group: Networking/Servers
+Version: F4.0.4.26
+License: Cisco
+
+Packager: Bruce Carleton <bruce.carleton@jasperwireless.com>
+Vendor: Cisco
+
+Requires: pam
+
+Description: TACACS+ daemon
