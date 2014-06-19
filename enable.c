@@ -53,6 +53,16 @@ enable(char *passwd, struct authen_data *data)
     /* if the user has a user-specific enable password, check it */
     cfg_passwd = cfg_get_enable_secret(username, TAC_PLUS_RECURSE);
     if (cfg_passwd != NULL) {
+# ifdef HAVE_PAM
+        if (strcmp(cfg_passwd, "PAM") == 0) {
+            if (!pam_verify(username, passwd))
+                goto FAIL;
+            data->status = TAC_PLUS_AUTHEN_STATUS_PASS;
+            exp_date = cfg_get_expires(username, TAC_PLUS_RECURSE);
+            set_expiration_status(exp_date, data);
+            goto SUCCESS;
+        }
+# endif
 	if ((verify_pwd(username, passwd, data, cfg_passwd))) {
 	    exp_date = cfg_get_expires(username, TAC_PLUS_RECURSE);
 	    set_expiration_status(exp_date, data);

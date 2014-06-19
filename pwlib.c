@@ -49,9 +49,6 @@ static int pam_tacacs(int, const struct pam_message **, struct pam_response **,
  */
 static int etc_passwd_file_verify(char *, char *, struct authen_data *);
 static int des_verify(char *, char *);
-#if HAVE_PAM
-static int pam_verify(char *, char *);
-#endif
 static int passwd_file_verify(char *, char *, struct authen_data *, char *);
 
 extern char *progname;
@@ -595,7 +592,7 @@ fail:
  * verify a provided user/password via PAM.
  * return 1 if verified, 0 otherwise.
  */
-static int
+int
 pam_verify(char *user, char *passwd)
 {
     int			err;

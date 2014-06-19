@@ -1220,9 +1220,18 @@ parse_user(void)
 		    user->enable = tac_strdup(sym_buf);
 		    break;
 #endif
+#ifdef HAVE_PAM
+                case S_pam:
+                    user->enable = tac_strdup(sym_buf);
+                    break;
+#endif
 
 		default:
 		    parse_error("expecting 'file', 'cleartext', 'nopassword', "
+#ifdef HAVE_PAM
+                                "'PAM', "
+#endif
+
 #ifdef SKEY
 				"'skey', "
 #endif
@@ -1900,9 +1909,16 @@ cfg_get_value(char *name, int isuser, int attr, int recurse)
     user = (USER *)hash_lookup(isuser ? usertable : grouptable, name);
 
     if (!user) {
+         /* look up default user */
+        user = (USER *)hash_lookup(isuser ? usertable : grouptable, "DEFAULT");
+        if (!user) {
+                if (debug & DEBUG_CONFIG_FLAG)
+                    report(LOG_DEBUG, "cfg_get_value: no user/group named %s", name);
+                return(value);
+        }
+
 	if (debug & DEBUG_CONFIG_FLAG)
-	    report(LOG_DEBUG, "cfg_get_value: no user/group named %s", name);
-	return(value);
+                report(LOG_DEBUG, "cfg_get_value: falling back to DEFAULT for user/group named %s", name);
     }
 
     /* found the entry. Lookup value from attr=value */

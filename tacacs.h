@@ -482,6 +482,9 @@ extern struct passwd *tac_passwd_lookup(char *, char *);
 void	set_expiration_status(char *, struct authen_data *);
 int	verify(char *, char *, struct authen_data *, int);
 int	verify_pwd(char *, char *, struct authen_data *, char *);
+#if HAVE_PAM
+int     pam_verify(char *, char *);
+#endif
 
 int aceclnt_fn(struct authen_data *data);
 int default_v0_fn(struct authen_data *data);

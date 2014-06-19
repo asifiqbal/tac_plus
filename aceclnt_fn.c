@@ -193,6 +193,7 @@ aceclnt_fn(struct authen_data *data)
 		    return(1);
 	    }
 
+	    data->flags = TAC_PLUS_AUTHEN_FLAG_NOECHO;
 	    snprintf(buf, ACEBUFSZ, "Enter PASSCODE: ");
 	    data->server_msg = tac_strdup(buf);
 	    data->status = TAC_PLUS_AUTHEN_STATUS_GETPASS;
